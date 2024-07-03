@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Custom project from Hilla
 
 This project can be used as a starting point to create your own Hilla application with Spring Boot.
@@ -49,3 +50,6 @@ source directory, contains the server-side Java views</td></tr>
 - Read the documentation at [hilla.dev/docs](https://hilla.dev/docs/).
 - Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/hilla) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin/hilla).
+=======
+# listaTarefas
+>>>>>>> 292700626f7bbbe7cba338eddedf285c40d54381
