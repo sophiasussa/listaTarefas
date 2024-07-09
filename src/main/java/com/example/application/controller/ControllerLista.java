@@ -13,6 +13,10 @@ public class ControllerLista {
         return dao.inserir(listaTarefas);
     }
 
+    public boolean alterar(ListaTarefas listaTarefas){
+        return dao.alterar(listaTarefas);
+    }   
+
     public List<ListaTarefas> pesquisarTodos(){
         return dao.pesquisarTodos();
     }
