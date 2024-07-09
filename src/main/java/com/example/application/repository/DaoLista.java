@@ -118,13 +118,15 @@ public class DaoLista {
 		}
 	}
 
-	public List<ListaTarefas> pesquisarPorResponsavel(int idResponsavel) {
+	public List<ListaTarefas> pesquisarPorResponsavel(String nomeResponsavel) {
 		List<ListaTarefas> lista = new ArrayList<>();
 		try {
 			Connection connection = DBConnection.getInstance().getConnection();
-			String consulta = "SELECT * FROM listaTarefas WHERE id_responsavel = ?";
+			String consulta = "SELECT * FROM listaTarefas lt " +
+							  "JOIN responsavel r ON lt.idResponsavel = r.id " +
+							  "WHERE r.nome = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
-			preparedStatement.setInt(1, idResponsavel);
+			preparedStatement.setString(1, nomeResponsavel);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next()) {

@@ -92,6 +92,9 @@ public class AddView extends Composite<VerticalLayout> {
                 int dataTarefa = Integer.parseInt(searchTerm);
                 List<ListaTarefas> resultado = controller4.pesquisarPorDataTarefa(dataTarefa);
                 basicGrid.setItems(resultado != null ? resultado : Collections.emptyList());
+            } else {
+                List<ListaTarefas> resultado = controller4.pesquisarPorResponsavel(searchTerm);
+                basicGrid.setItems(resultado != null ? resultado : Collections.emptyList());
             }
         });
 
