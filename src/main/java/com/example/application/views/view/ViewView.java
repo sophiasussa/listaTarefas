@@ -1,5 +1,13 @@
 package com.example.application.views.view;
 
+import com.example.application.controller.ControllerCategoria;
+import com.example.application.controller.ControllerPrioridade;
+import com.example.application.controller.ControllerResponsavel;
+import com.example.application.controller.ControllerStatus;
+import com.example.application.model.CategoriaTarefa;
+import com.example.application.model.Prioridade;
+import com.example.application.model.Responsavel;
+import com.example.application.model.Status;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -10,6 +18,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,13 +30,31 @@ import com.vaadin.flow.router.RouteAlias;
 import java.util.ArrayList;
 import java.util.List;
 
-@PageTitle("view")
-@Menu(icon = "line-awesome/svg/pencil-ruler-solid.svg", order = 0)
+@PageTitle("Adicionar Tarefa")
+@Menu(icon = "line-awesome/svg/plus-solid.svg", order = 0)
 @Route(value = "")
 @RouteAlias(value = "")
 public class ViewView extends Composite<VerticalLayout> {
+    ControllerPrioridade controller = new ControllerPrioridade();
+    ControllerCategoria controller1 = new ControllerCategoria();
+    ControllerResponsavel controller2 = new ControllerResponsavel();
+    ControllerStatus controller3 = new ControllerStatus();
 
     public ViewView() {
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setWidth("100%");
+        mainLayout.getStyle().set("flex-grow", "1");
+
+        VerticalLayout layout1 = new VerticalLayout();
+        layout1.setWidth("100%");
+        layout1.getStyle().set("flex-grow", "1");
+
+        layout1.getStyle().set("border", "1px solid #ccc");
+        layout1.getStyle().set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.1)");
+        layout1.getStyle().set("padding", "16px");
+        layout1.getStyle().set("border-radius", "8px");
+        layout1.getStyle().set("background-color", "#fff");
+
         FormLayout formLayout2Col = new FormLayout();
         TextField textField = new TextField();
         TextArea textArea = new TextArea();
@@ -44,46 +72,49 @@ public class ViewView extends Composite<VerticalLayout> {
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
         formLayout2Col.setWidth("100%");
-        textField.setLabel("Text field");
+        textField.setPlaceholder("Data");
         textField.setWidth("min-content");
-        textArea.setLabel("Text area");
+        textArea.setPlaceholder("Observação");
         textArea.setWidth("100%");
-        textArea2.setLabel("Text area");
+        textArea2.setPlaceholder("Descrição");
         textArea2.setWidth("100%");
         formLayout2Col2.setWidth("100%");
-        comboBox.setLabel("Combo Box");
+        comboBox.setPlaceholder("Responsavel");
         comboBox.setWidth("min-content");
-        setComboBoxSampleData(comboBox);
-        comboBox2.setLabel("Combo Box");
+        comboBox2.setPlaceholder("Status");
         comboBox2.setWidth("min-content");
-        setComboBoxSampleData(comboBox2);
-        buttonTertiary.setText("Button");
+        buttonTertiary.setText("Adicionar Responsavel");
         buttonTertiary.setWidth("min-content");
         buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        buttonTertiary2.setText("Button");
+        buttonTertiary2.setText("Adicionar Status");
         buttonTertiary2.setWidth("min-content");
         buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        comboBox3.setLabel("Combo Box");
+        comboBox3.setPlaceholder("Prioridade");
         comboBox3.setWidth("min-content");
-        setComboBoxSampleData(comboBox3);
-        comboBox4.setLabel("Combo Box");
+        comboBox4.setPlaceholder("Categoria");
         comboBox4.setWidth("min-content");
-        setComboBoxSampleData(comboBox4);
-        buttonTertiary3.setText("Button");
+        buttonTertiary3.setText("Adicionar Prioridade");
         buttonTertiary3.setWidth("min-content");
 
-        Button buttonInsideLink = new Button("Adicionar Tipo de Telefone");
+ /*       Button buttonInsideLink = new Button("Adicionar Tipo de Telefone");
         buttonInsideLink.addClickListener(event -> openDialog());
         buttonInsideLink.getStyle().set("box-shadow", "0 0 4px rgba(0, 0, 0, 0.2)");
-        link.add(buttonInsideLink);
+        link.add(buttonInsideLink);*/
 
         buttonTertiary3.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        buttonTertiary4.setText("Button");
+        buttonTertiary4.setText("Adicionar Categoria");
         buttonTertiary4.setWidth("min-content");
         buttonTertiary4.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        buttonPrimary.setText("Button");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setWidth("100%");
+        buttonLayout.add(buttonPrimary);
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonPrimary.setText("Salvar");
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonPrimary.getStyle().set("border-radius", "20px");
+        
         getContent().add(formLayout2Col);
         formLayout2Col.add(textField);
         formLayout2Col.add(textArea);
@@ -97,24 +128,36 @@ public class ViewView extends Composite<VerticalLayout> {
         formLayout2Col2.add(comboBox4);
         formLayout2Col2.add(buttonTertiary3);
         formLayout2Col2.add(buttonTertiary4);
-        getContent().add(buttonPrimary);
+        layout1.add(formLayout2Col, textArea2, formLayout2Col2);
+        mainLayout.add(layout1, buttonLayout);
+        getContent().add(mainLayout);
     }
 
-    record SampleItem(String value, String label, Boolean disabled) {
+    private void setComboBoxData(ComboBox<Responsavel> comboBox) {
+        List<Responsavel> responsaveis = controller2.pesquisarTodos();
+        comboBox.setItems(responsaveis);
+        comboBox.setItemLabelGenerator(responsavel -> responsavel.getNome());
     }
 
-    private void setComboBoxSampleData(ComboBox comboBox) {
-        List<SampleItem> sampleItems = new ArrayList<>();
-        sampleItems.add(new SampleItem("first", "First", null));
-        sampleItems.add(new SampleItem("second", "Second", null));
-        sampleItems.add(new SampleItem("third", "Third", Boolean.TRUE));
-        sampleItems.add(new SampleItem("fourth", "Fourth", null));
-        comboBox.setItems(sampleItems);
-        comboBox.setItemLabelGenerator(item -> ((SampleItem) item).label());
+    private void setComboBoxStatusData(ComboBox<Status> comboBox1) {
+        List<Status> status = controller3.pesquisarTodos();
+        comboBox1.setItems(status);
+        comboBox1.setItemLabelGenerator(statu -> statu.getDescricao());
     }
 
+    private void setComboBoxPrioridadeData(ComboBox<Prioridade> comboBox2) {
+        List<Prioridade> prioridades = controller.pesquisarTodos();
+        comboBox2.setItems(prioridades);
+        comboBox2.setItemLabelGenerator(prioridade -> prioridade.getDescricao());
+    }
 
-    private void openDialog() {
+    private void setComboBoxCategoriaData(ComboBox<CategoriaTarefa> comboBox3) {
+        List<CategoriaTarefa> categorias = controller1.pesquisarTodos();
+        comboBox3.setItems(categorias);
+        comboBox3.setItemLabelGenerator(categoria -> categoria.getDescricao());
+    }
+
+ /*    private void openDialog() {
         Dialog dialog = new Dialog();
         dialog.setWidth("800px"); 
         dialog.setHeight("600px");
@@ -173,6 +216,6 @@ public class ViewView extends Composite<VerticalLayout> {
         editor.addSaveListener(event -> {
             grid.getDataProvider().refreshItem(event.getItem());
         });
-    }
+    }*/
 
 }

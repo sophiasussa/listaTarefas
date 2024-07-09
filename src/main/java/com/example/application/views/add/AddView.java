@@ -5,6 +5,7 @@ import com.example.application.services.SamplePersonService;
 import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -25,8 +26,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-@PageTitle("add")
-@Menu(icon = "line-awesome/svg/pencil-ruler-solid.svg", order = 1)
+@PageTitle("Visualizar Tarefas")
+@Menu(icon = "line-awesome/svg/eye-solid.svg", order = 1)
 @Route(value = "my-view")
 @Uses(Icon.class)
 public class AddView extends Composite<VerticalLayout> {
@@ -47,9 +48,10 @@ public class AddView extends Composite<VerticalLayout> {
         layoutRow.setHeight("90px");
         layoutRow.setAlignItems(Alignment.END);
         layoutRow.setJustifyContentMode(JustifyContentMode.END);
-        textField.setLabel("Text field");
+        textField.setPlaceholder("Pesquisar");
         textField.setWidth("min-content");
-        buttonPrimary.setText("Button");
+        buttonPrimary.setIcon(new Icon(VaadinIcon.SEARCH));
+        buttonPrimary.getStyle().set("border-radius", "8px");
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         basicGrid.setWidth("100%");
