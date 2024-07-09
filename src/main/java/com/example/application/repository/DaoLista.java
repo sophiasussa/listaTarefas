@@ -81,6 +81,7 @@ public class DaoLista {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

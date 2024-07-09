@@ -6,11 +6,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.application.model.CategoriaTarefa;
 
 public class DaoCategoria {
 
-        public boolean inserir(CategoriaTarefa categoriaTarefa){
+    public boolean inserir(CategoriaTarefa categoriaTarefa){
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String insert = "INSERT INTO categoriatarefa (descricao) VALUE (?)";
@@ -24,7 +27,7 @@ public class DaoCategoria {
                 return false;
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+			e.printStackTrace();
             return false;
         }
     }
@@ -43,6 +46,7 @@ public class DaoCategoria {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -60,6 +64,7 @@ public class DaoCategoria {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -78,6 +83,7 @@ public class DaoCategoria {
 			}
 			return categoriaTarefa;
 		} catch (Exception e) {
+            e.printStackTrace();
 			return null;
 		}
 	}
@@ -98,6 +104,7 @@ public class DaoCategoria {
             }
             return lista;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

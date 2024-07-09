@@ -44,6 +44,7 @@ public class DaoPrioridade {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -61,6 +62,7 @@ public class DaoPrioridade {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -79,6 +81,7 @@ public class DaoPrioridade {
 			}
 			return prioridade;
 		} catch (Exception e) {
+            e.printStackTrace();
 			return null;
 		}
 	}
@@ -99,6 +102,7 @@ public class DaoPrioridade {
             }
             return lista;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

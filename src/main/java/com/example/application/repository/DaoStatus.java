@@ -44,6 +44,7 @@ public class DaoStatus {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -61,6 +62,7 @@ public class DaoStatus {
                 return false;
             }
         } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -79,6 +81,7 @@ public class DaoStatus {
 			}
 			return status;
 		} catch (Exception e) {
+            e.printStackTrace();
 			return null;
 		}
 	}
@@ -99,6 +102,7 @@ public class DaoStatus {
             }
             return lista;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
