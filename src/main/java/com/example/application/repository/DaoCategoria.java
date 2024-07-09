@@ -13,7 +13,7 @@ public class DaoCategoria {
         public boolean inserir(CategoriaTarefa categoriaTarefa){
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String insert = "INSERT INTO categoriatarefa (nome) VALUE (?)";
+            String insert = "INSERT INTO categoriatarefa (descricao) VALUE (?)";
             PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
             preparedStatement1.setString(1, categoriaTarefa.getDescricao());
 
@@ -32,7 +32,7 @@ public class DaoCategoria {
     public boolean alterar(CategoriaTarefa categoriaTarefa){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
-            String update = "UPDATE categoriatarefa set nome = ? where id = ?";
+            String update = "UPDATE categoriatarefa set descricao = ? where id = ?";
             PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setString(1, categoriaTarefa.getDescricao());
             preparedStatement1.setInt(2, categoriaTarefa.getId());
@@ -75,7 +75,7 @@ public class DaoCategoria {
             while (resultSet.next()) {
                 categoriaTarefa = new CategoriaTarefa();
                 categoriaTarefa.setId(resultSet.getInt("id"));
-                categoriaTarefa.setDescricao(resultSet.getString("descrição"));
+                categoriaTarefa.setDescricao(resultSet.getString("descricao"));
                 lista.add(categoriaTarefa);
             }
             return lista;

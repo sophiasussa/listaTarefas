@@ -14,7 +14,7 @@ public class DaoPrioridade {
     public boolean inserir(Prioridade prioridade){
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String insert = "INSERT INTO prioridade (nome) VALUE (?)";
+            String insert = "INSERT INTO prioridade (descricao) VALUE (?)";
             PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
             preparedStatement1.setString(1, prioridade.getDescricao());
 
@@ -33,7 +33,7 @@ public class DaoPrioridade {
     public boolean alterar(Prioridade prioridade){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
-            String update = "UPDATE prioridade set nome = ? where id = ?";
+            String update = "UPDATE prioridade set descricao = ? where id = ?";
             PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setString(1, prioridade.getDescricao());
             preparedStatement1.setInt(2, prioridade.getId());
@@ -76,7 +76,7 @@ public class DaoPrioridade {
             while (resultSet.next()) {
                 prioridade = new Prioridade();
                 prioridade.setId(resultSet.getInt("id"));
-                prioridade.setDescricao(resultSet.getString("descrição"));
+                prioridade.setDescricao(resultSet.getString("descricao"));
                 lista.add(prioridade);
             }
             return lista;

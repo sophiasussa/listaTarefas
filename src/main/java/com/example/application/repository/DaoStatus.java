@@ -13,7 +13,7 @@ public class DaoStatus {
     public boolean inserir(Status status){
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String insert = "INSERT INTO status (nome) VALUE (?)";
+            String insert = "INSERT INTO status (descricao) VALUE (?)";
             PreparedStatement preparedStatement1 = connection.prepareStatement(insert);
             preparedStatement1.setString(1, status.getDescricao());
 
@@ -32,7 +32,7 @@ public class DaoStatus {
     public boolean alterar(Status status){
         try{
             Connection connection = DBConnection.getInstance().getConnection();
-            String update = "UPDATE status set nome = ? where id = ?";
+            String update = "UPDATE status set descricao = ? where id = ?";
             PreparedStatement preparedStatement1 = connection.prepareStatement(update);
             preparedStatement1.setString(1, status.getDescricao());
             preparedStatement1.setInt(2, status.getId());
@@ -75,7 +75,7 @@ public class DaoStatus {
             while (resultSet.next()) {
                 status = new Status();
                 status.setId(resultSet.getInt("id"));
-                status.setDescricao(resultSet.getString("descrição"));
+                status.setDescricao(resultSet.getString("descricao"));
                 lista.add(status);
             }
             return lista;

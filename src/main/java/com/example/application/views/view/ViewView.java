@@ -15,14 +15,17 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -83,28 +86,30 @@ public class ViewView extends Composite<VerticalLayout> {
         comboBox.setWidth("min-content");
         comboBox2.setPlaceholder("Status");
         comboBox2.setWidth("min-content");
+
         buttonTertiary.setText("Adicionar Responsavel");
         buttonTertiary.setWidth("min-content");
         buttonTertiary.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        buttonTertiary.addClickListener(event -> openDialog());
+
         buttonTertiary2.setText("Adicionar Status");
         buttonTertiary2.setWidth("min-content");
         buttonTertiary2.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        buttonTertiary2.addClickListener(event -> openDialog2());
+
         comboBox3.setPlaceholder("Prioridade");
         comboBox3.setWidth("min-content");
         comboBox4.setPlaceholder("Categoria");
         comboBox4.setWidth("min-content");
         buttonTertiary3.setText("Adicionar Prioridade");
         buttonTertiary3.setWidth("min-content");
-
- /*       Button buttonInsideLink = new Button("Adicionar Tipo de Telefone");
-        buttonInsideLink.addClickListener(event -> openDialog());
-        buttonInsideLink.getStyle().set("box-shadow", "0 0 4px rgba(0, 0, 0, 0.2)");
-        link.add(buttonInsideLink);*/
-
         buttonTertiary3.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        buttonTertiary3.addClickListener(event -> openDialog3());
+
         buttonTertiary4.setText("Adicionar Categoria");
         buttonTertiary4.setWidth("min-content");
         buttonTertiary4.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        buttonTertiary4.addClickListener(event -> openDialog4());
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setWidth("100%");
@@ -157,7 +162,7 @@ public class ViewView extends Composite<VerticalLayout> {
         comboBox3.setItemLabelGenerator(categoria -> categoria.getDescricao());
     }
 
- /*    private void openDialog() {
+    private void openDialog() {
         Dialog dialog = new Dialog();
         dialog.setWidth("800px"); 
         dialog.setHeight("600px");
@@ -165,38 +170,38 @@ public class ViewView extends Composite<VerticalLayout> {
         FormLayout formLayout = new FormLayout();
         TextField nomeField = new TextField("Nome");
 
-        Grid<TipoTelefone> grid = new Grid<>(TipoTelefone.class);
+        Grid<Responsavel> grid = new Grid<>(Responsavel.class);
         grid.setColumns("nome");
 
-        List<TipoTelefone> tiposDeTelefone = controller.pesquisarTodos();
-        grid.setItems(tiposDeTelefone);
+        List<Responsavel> responsaveis = controller2.pesquisarTodos();
+        grid.setItems(responsaveis);
 
-        Editor<TipoTelefone> editor = grid.getEditor();
-        Binder<TipoTelefone> binder = new Binder<>(TipoTelefone.class);
+        Editor<Responsavel> editor = grid.getEditor();
+        Binder<Responsavel> binder = new Binder<>(Responsavel.class);
         editor.setBinder(binder);
 
         TextField nomeEditor = new TextField();
-        binder.forField(nomeEditor).bind(TipoTelefone::getNome, TipoTelefone::setNome);
+        binder.forField(nomeEditor).bind(Responsavel::getNome, Responsavel::setNome);
         grid.getColumnByKey("nome").setEditorComponent(nomeEditor);
 
         grid.addItemDoubleClickListener(event -> editor.editItem(event.getItem()));
         editor.addCloseListener(event -> grid.getDataProvider().refreshItem(event.getItem()));
         
-        grid.addComponentColumn(tipoTelefone -> {
+        grid.addComponentColumn(responsavel -> {
             Button alterarButton = new Button("Alterar", new Icon(VaadinIcon.COG));
             alterarButton.addClickListener(e -> {
                 if (editor.isOpen()) {
                     editor.save();
-                    TipoTelefone editedTipoTelefone = editor.getItem();
-                    if (controller.alterar(editedTipoTelefone)) {
+                    Responsavel editedResponsavel = editor.getItem();
+                    if (controller2.alterar(editedResponsavel)) {
                         Notification notification = new Notification(
-                                "Tipo de Telefone atualizado com sucesso.", 3000);
+                                "Responsavel atualizado com sucesso.", 3000);
                         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                         notification.setPosition(Notification.Position.MIDDLE);
                         notification.open();
                         
-                        tiposDeTelefone.clear();
-                        tiposDeTelefone.addAll(controller.pesquisarTodos());
+                        responsaveis.clear();
+                        responsaveis.addAll(controller2.pesquisarTodos());
                         grid.getDataProvider().refreshAll();
                     } else {
                         Notification notification = new Notification(
@@ -206,7 +211,7 @@ public class ViewView extends Composite<VerticalLayout> {
                         notification.open();
                     }
                 } else {
-                    editor.editItem(tipoTelefone);
+                    editor.editItem(responsavel);
                     nomeEditor.focus();
                 }
             });
@@ -216,6 +221,521 @@ public class ViewView extends Composite<VerticalLayout> {
         editor.addSaveListener(event -> {
             grid.getDataProvider().refreshItem(event.getItem());
         });
-    }*/
+
+        grid.addComponentColumn(responsavel -> {
+            Button deletarButton = new Button(new Icon(VaadinIcon.TRASH));
+            deletarButton.addClickListener(e -> {
+                if (controller2.excluir(responsavel)) {
+                    Notification notification = new Notification(
+                            "Responsavel deletado com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                    
+                    responsaveis.clear();
+                    responsaveis.addAll(controller2.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao deletar. Tente novamente.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            });
+            return deletarButton;
+        }).setHeader("Deletar");
+    
+
+        Button confirmarButton = new Button("Salvar", event -> {
+            if(nomeField.isEmpty()){
+                Notification notification = new Notification(
+                    "Erro: O nome não pode estar vazio.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            } else {
+                Responsavel responsavel = new Responsavel();
+                responsavel.setNome(nomeField.getValue());
+                if (controller2.inserir(responsavel) == true) {
+                    Notification notification = new Notification(
+                            "Responsavel salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+
+                    nomeField.clear();
+                    responsaveis.clear();
+                    responsaveis.addAll(controller2.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
+        Button cancelarButton = new Button("Fechar", event -> dialog.close());
+
+        cancelarButton.getStyle()
+            .set("background-color", "#FF0000")  
+            .set("color", "#FFFFFF")  
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        confirmarButton.getStyle()
+            .set("background-color", "#228B22")
+            .set("color", "#FFFFFF")
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelarButton);
+        buttonLayout.setWidthFull();
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonLayout.setPadding(false);
+        buttonLayout.setSpacing(true);
+
+        formLayout.add(nomeField, confirmarButton);
+
+        VerticalLayout dialogLayout = new VerticalLayout(formLayout, grid, buttonLayout);
+        dialog.add(dialogLayout);
+        dialog.open();
+    }
+
+    private void openDialog2() {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("800px"); 
+        dialog.setHeight("600px");
+
+        FormLayout formLayout = new FormLayout();
+        TextField nomeField = new TextField("descricao");
+
+        Grid<Status> grid = new Grid<>(Status.class);
+        grid.setColumns("descricao");
+
+        List<Status> statuss = controller3.pesquisarTodos();
+        grid.setItems(statuss);
+
+        Editor<Status> editor = grid.getEditor();
+        Binder<Status> binder = new Binder<>(Status.class);
+        editor.setBinder(binder);
+
+        TextField nomeEditor = new TextField();
+        binder.forField(nomeEditor).bind(Status::getDescricao, Status::setDescricao);
+        grid.getColumnByKey("descricao").setEditorComponent(nomeEditor);
+
+        grid.addItemDoubleClickListener(event -> editor.editItem(event.getItem()));
+        editor.addCloseListener(event -> grid.getDataProvider().refreshItem(event.getItem()));
+        
+        grid.addComponentColumn(statu -> {
+            Button alterarButton = new Button("Alterar", new Icon(VaadinIcon.COG));
+            alterarButton.addClickListener(e -> {
+                if (editor.isOpen()) {
+                    editor.save();
+                    Status editedStatus = editor.getItem();
+                    if (controller3.alterar(editedStatus)) {
+                        Notification notification = new Notification(
+                                "Status atualizado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                        
+                        statuss.clear();
+                        statuss.addAll(controller3.pesquisarTodos());
+                        grid.getDataProvider().refreshAll();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao atualizar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    editor.editItem(statu);
+                    nomeEditor.focus();
+                }
+            });
+            return alterarButton;
+        }).setHeader("Alterar");
+        
+        editor.addSaveListener(event -> {
+            grid.getDataProvider().refreshItem(event.getItem());
+        });
+
+        grid.addComponentColumn(statu -> {
+            Button deletarButton = new Button(new Icon(VaadinIcon.TRASH));
+            deletarButton.addClickListener(e -> {
+                if (controller3.excluir(statu)) {
+                    Notification notification = new Notification(
+                            "Status deletado com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                    
+                    statuss.clear();
+                    statuss.addAll(controller3.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao deletar. Tente novamente.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            });
+            return deletarButton;
+        }).setHeader("Deletar");
+    
+
+        Button confirmarButton = new Button("Salvar", event -> {
+            if(nomeField.isEmpty()){
+                Notification notification = new Notification(
+                    "Erro: A descrição não pode estar vazio.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            } else {
+                Status status = new Status();
+                status.setDescricao(nomeField.getValue());
+                if (controller3.inserir(status) == true) {
+                    Notification notification = new Notification(
+                            "Responsavel salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+
+                    nomeField.clear();
+                    statuss.clear();
+                    statuss.addAll(controller3.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
+        Button cancelarButton = new Button("Fechar", event -> dialog.close());
+
+        cancelarButton.getStyle()
+            .set("background-color", "#FF0000")  
+            .set("color", "#FFFFFF")  
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        confirmarButton.getStyle()
+            .set("background-color", "#228B22")
+            .set("color", "#FFFFFF")
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelarButton);
+        buttonLayout.setWidthFull();
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonLayout.setPadding(false);
+        buttonLayout.setSpacing(true);
+
+        formLayout.add(nomeField, confirmarButton);
+
+        VerticalLayout dialogLayout = new VerticalLayout(formLayout, grid, buttonLayout);
+        dialog.add(dialogLayout);
+        dialog.open();
+    }
+
+    private void openDialog3() {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("800px"); 
+        dialog.setHeight("600px");
+
+        FormLayout formLayout = new FormLayout();
+        TextField nomeField = new TextField("descricao");
+
+        Grid<Prioridade> grid = new Grid<>(Prioridade.class);
+        grid.setColumns("descricao");
+
+        List<Prioridade> prioridades = controller.pesquisarTodos();
+        grid.setItems(prioridades);
+
+        Editor<Prioridade> editor = grid.getEditor();
+        Binder<Prioridade> binder = new Binder<>(Prioridade.class);
+        editor.setBinder(binder);
+
+        TextField nomeEditor = new TextField();
+        binder.forField(nomeEditor).bind(Prioridade::getDescricao, Prioridade::setDescricao);
+        grid.getColumnByKey("descricao").setEditorComponent(nomeEditor);
+
+        grid.addItemDoubleClickListener(event -> editor.editItem(event.getItem()));
+        editor.addCloseListener(event -> grid.getDataProvider().refreshItem(event.getItem()));
+        
+        grid.addComponentColumn(prioridade -> {
+            Button alterarButton = new Button("Alterar", new Icon(VaadinIcon.COG));
+            alterarButton.addClickListener(e -> {
+                if (editor.isOpen()) {
+                    editor.save();
+                    Prioridade editedPrioridade = editor.getItem();
+                    if (controller.alterar(editedPrioridade)) {
+                        Notification notification = new Notification(
+                                "Prioridade atualizado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                        
+                        prioridades.clear();
+                        prioridades.addAll(controller.pesquisarTodos());
+                        grid.getDataProvider().refreshAll();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao atualizar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    editor.editItem(prioridade);
+                    nomeEditor.focus();
+                }
+            });
+            return alterarButton;
+        }).setHeader("Alterar");
+        
+        editor.addSaveListener(event -> {
+            grid.getDataProvider().refreshItem(event.getItem());
+        });
+
+        grid.addComponentColumn(prioridade -> {
+            Button deletarButton = new Button(new Icon(VaadinIcon.TRASH));
+            deletarButton.addClickListener(e -> {
+                if (controller.excluir(prioridade)) {
+                    Notification notification = new Notification(
+                            "Prioridade deletado com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                    
+                    prioridades.clear();
+                    prioridades.addAll(controller.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao deletar. Tente novamente.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            });
+            return deletarButton;
+        }).setHeader("Deletar");
+    
+
+        Button confirmarButton = new Button("Salvar", event -> {
+            if(nomeField.isEmpty()){
+                Notification notification = new Notification(
+                    "Erro: A descrição não pode estar vazio.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            } else {
+                Prioridade prioridade = new Prioridade();
+                prioridade.setDescricao(nomeField.getValue());
+                if (controller.inserir(prioridade) == true) {
+                    Notification notification = new Notification(
+                            "Prioridade salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+
+                    nomeField.clear();
+                    prioridades.clear();
+                    prioridades.addAll(controller.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
+        Button cancelarButton = new Button("Fechar", event -> dialog.close());
+
+        cancelarButton.getStyle()
+            .set("background-color", "#FF0000")  
+            .set("color", "#FFFFFF")  
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        confirmarButton.getStyle()
+            .set("background-color", "#228B22")
+            .set("color", "#FFFFFF")
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelarButton);
+        buttonLayout.setWidthFull();
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonLayout.setPadding(false);
+        buttonLayout.setSpacing(true);
+
+        formLayout.add(nomeField, confirmarButton);
+
+        VerticalLayout dialogLayout = new VerticalLayout(formLayout, grid, buttonLayout);
+        dialog.add(dialogLayout);
+        dialog.open();
+    }
+
+    private void openDialog4() {
+        Dialog dialog = new Dialog();
+        dialog.setWidth("800px"); 
+        dialog.setHeight("600px");
+
+        FormLayout formLayout = new FormLayout();
+        TextField nomeField = new TextField("descricao");
+
+        Grid<CategoriaTarefa> grid = new Grid<>(CategoriaTarefa.class);
+        grid.setColumns("descricao");
+
+        List<CategoriaTarefa> categorias = controller1.pesquisarTodos();
+        grid.setItems(categorias);
+
+        Editor<CategoriaTarefa> editor = grid.getEditor();
+        Binder<CategoriaTarefa> binder = new Binder<>(CategoriaTarefa.class);
+        editor.setBinder(binder);
+
+        TextField nomeEditor = new TextField();
+        binder.forField(nomeEditor).bind(CategoriaTarefa::getDescricao, CategoriaTarefa::setDescricao);
+        grid.getColumnByKey("descricao").setEditorComponent(nomeEditor);
+
+        grid.addItemDoubleClickListener(event -> editor.editItem(event.getItem()));
+        editor.addCloseListener(event -> grid.getDataProvider().refreshItem(event.getItem()));
+        
+        grid.addComponentColumn(categoria -> {
+            Button alterarButton = new Button("Alterar", new Icon(VaadinIcon.COG));
+            alterarButton.addClickListener(e -> {
+                if (editor.isOpen()) {
+                    editor.save();
+                    CategoriaTarefa editedCategoria = editor.getItem();
+                    if (controller1.alterar(editedCategoria)) {
+                        Notification notification = new Notification(
+                                "Categoria atualizado com sucesso.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                        
+                        categorias.clear();
+                        categorias.addAll(controller1.pesquisarTodos());
+                        grid.getDataProvider().refreshAll();
+                    } else {
+                        Notification notification = new Notification(
+                                "Erro ao atualizar. Verifique se todos os dados foram preenchidos.", 3000);
+                        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                        notification.setPosition(Notification.Position.MIDDLE);
+                        notification.open();
+                    }
+                } else {
+                    editor.editItem(categoria);
+                    nomeEditor.focus();
+                }
+            });
+            return alterarButton;
+        }).setHeader("Alterar");
+        
+        editor.addSaveListener(event -> {
+            grid.getDataProvider().refreshItem(event.getItem());
+        });
+
+        grid.addComponentColumn(categoria -> {
+            Button deletarButton = new Button(new Icon(VaadinIcon.TRASH));
+            deletarButton.addClickListener(e -> {
+                if (controller1.excluir(categoria)) {
+                    Notification notification = new Notification(
+                            "Categoria deletado com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                    
+                    categorias.clear();
+                    categorias.addAll(controller1.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao deletar. Tente novamente.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            });
+            return deletarButton;
+        }).setHeader("Deletar");
+    
+
+        Button confirmarButton = new Button("Salvar", event -> {
+            if(nomeField.isEmpty()){
+                Notification notification = new Notification(
+                    "Erro: A descrição não pode estar vazio.", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+            } else {
+                CategoriaTarefa categoriaTarefa = new CategoriaTarefa();
+                categoriaTarefa.setDescricao(nomeField.getValue());
+                if (controller1.inserir(categoriaTarefa) == true) {
+                    Notification notification = new Notification(
+                            "Categoria salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+
+                    nomeField.clear();
+                    categorias.clear();
+                    categorias.addAll(controller1.pesquisarTodos());
+                    grid.getDataProvider().refreshAll();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            }
+        });
+        Button cancelarButton = new Button("Fechar", event -> dialog.close());
+
+        cancelarButton.getStyle()
+            .set("background-color", "#FF0000")  
+            .set("color", "#FFFFFF")  
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        confirmarButton.getStyle()
+            .set("background-color", "#228B22")
+            .set("color", "#FFFFFF")
+            .set("border-radius", "10px")
+            .set("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
+            .set("cursor", "pointer");
+
+        HorizontalLayout buttonLayout = new HorizontalLayout(cancelarButton);
+        buttonLayout.setWidthFull();
+        buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        buttonLayout.setPadding(false);
+        buttonLayout.setSpacing(true);
+
+        formLayout.add(nomeField, confirmarButton);
+
+        VerticalLayout dialogLayout = new VerticalLayout(formLayout, grid, buttonLayout);
+        dialog.add(dialogLayout);
+        dialog.open();
+    }
 
 }
