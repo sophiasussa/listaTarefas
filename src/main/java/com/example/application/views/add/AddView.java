@@ -31,6 +31,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -116,12 +117,10 @@ public class AddView extends Composite<VerticalLayout> {
             MenuBar menuBar = new MenuBar();
             MenuItem menuItem = menuBar.addItem("...");
             SubMenu subMenu = menuItem.getSubMenu();
-            // Adicionar itens ao submenu, como editar e excluir
             subMenu.addItem("Editar", event -> abrirDialogoEdicao(listaTarefa));
             subMenu.addItem("Excluir", event -> {
-                // Lógica para excluir a tarefa
             /*  int tarefaId = listaTarefa.getId();
-                boolean sucesso = controller.excluirTarefa(tarefaId); // Substitua 'excluirTarefa' pelo método correto
+                boolean sucesso = controller.excluirTarefa(tarefaId); 
                 if (sucesso) {
                     Notification.show("Tarefa excluída com sucesso!");
                     basicGrid.setItems(controller.pesquisarTodos());
@@ -167,34 +166,42 @@ public class AddView extends Composite<VerticalLayout> {
 
     private void abrirDialogoEdicao(ListaTarefas listaTarefas) {
         Dialog dialog = new Dialog();
+        dialog.setCloseOnOutsideClick(false);
+
         VerticalLayout layout = new VerticalLayout();
-        dialog.setWidth("1200px");
-        dialog.setHeight("1000px");
+        layout.setPadding(true);
+        layout.setSpacing(true);
 
         TextField dataField = new TextField("Data");
         dataField.setValue(String.valueOf(listaTarefas.getData_tarefa()));
 
-        TextField descricaoField = new TextField("Descrição");
+        TextArea descricaoField = new TextArea("Descrição");
         descricaoField.setValue(listaTarefas.getDescricao_tarefa());
 
-        TextField observacaoField = new TextField("Observação");
+        TextArea observacaoField = new TextArea("Observação");
         observacaoField.setValue(listaTarefas.getObservacao());
 
         ComboBox<Prioridade> prioridade = new ComboBox<>("Prioridade");
         setComboBoxPrioridadeData(prioridade);
+        prioridade.setValue(listaTarefas.getPrioridade());
 
         ComboBox<CategoriaTarefa> categoria = new ComboBox<>("Categoria");
         setComboBoxCategoriaData(categoria);
+        categoria.setValue(listaTarefas.getCategoriaTarefa());
 
         ComboBox<Responsavel> responsavel = new ComboBox<>("Responsavel");
         setComboBoxData(responsavel);
+        responsavel.setValue(listaTarefas.getResponsavel());
 
         ComboBox<Status> status = new ComboBox<>("Status");
         setComboBoxStatusData(status);
+        status.setValue(listaTarefas.getStatus());
 
-        HorizontalLayout camposLayout = new HorizontalLayout(dataField, descricaoField, observacaoField, prioridade, categoria, responsavel, status);
+        HorizontalLayout camposLayout = new HorizontalLayout(dataField, descricaoField, observacaoField);
         layout.add(camposLayout);
 
+        HorizontalLayout camposLayout2 = new HorizontalLayout(prioridade, categoria, responsavel, status);
+        layout.add(camposLayout2);
 
         Button salvarButton = new Button("Salvar", event -> {
             listaTarefas.setData_tarefa(Integer.parseInt(dataField.getValue()));
