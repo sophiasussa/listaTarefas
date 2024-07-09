@@ -21,6 +21,10 @@ public class ControllerStatus {
         return dao.excluir(status);
     }
 
+    public Status pesquisar(int id){
+        return dao.pesquisar(id);
+    }
+
     public List<Status> pesquisarTodos(){
         return dao.pesquisarTodos();
     }

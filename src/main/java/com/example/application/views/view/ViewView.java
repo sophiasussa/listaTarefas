@@ -1,10 +1,12 @@
 package com.example.application.views.view;
 
 import com.example.application.controller.ControllerCategoria;
+import com.example.application.controller.ControllerLista;
 import com.example.application.controller.ControllerPrioridade;
 import com.example.application.controller.ControllerResponsavel;
 import com.example.application.controller.ControllerStatus;
 import com.example.application.model.CategoriaTarefa;
+import com.example.application.model.ListaTarefas;
 import com.example.application.model.Prioridade;
 import com.example.application.model.Responsavel;
 import com.example.application.model.Status;
@@ -42,6 +44,7 @@ public class ViewView extends Composite<VerticalLayout> {
     ControllerCategoria controller1 = new ControllerCategoria();
     ControllerResponsavel controller2 = new ControllerResponsavel();
     ControllerStatus controller3 = new ControllerStatus();
+    ControllerLista controller4 = new ControllerLista();
 
     public ViewView() {
         VerticalLayout mainLayout = new VerticalLayout();
@@ -63,12 +66,12 @@ public class ViewView extends Composite<VerticalLayout> {
         TextArea textArea = new TextArea();
         TextArea textArea2 = new TextArea();
         FormLayout formLayout2Col2 = new FormLayout();
-        ComboBox comboBox = new ComboBox();
-        ComboBox comboBox2 = new ComboBox();
+        ComboBox<Responsavel> comboBox = new ComboBox();
+        ComboBox<Status> comboBox2 = new ComboBox();
         Button buttonTertiary = new Button();
         Button buttonTertiary2 = new Button();
-        ComboBox comboBox3 = new ComboBox();
-        ComboBox comboBox4 = new ComboBox();
+        ComboBox<Prioridade> comboBox3 = new ComboBox();
+        ComboBox<CategoriaTarefa> comboBox4 = new ComboBox();
         Button buttonTertiary3 = new Button();
         Button buttonTertiary4 = new Button();
         Button buttonPrimary = new Button();
@@ -84,8 +87,11 @@ public class ViewView extends Composite<VerticalLayout> {
         formLayout2Col2.setWidth("100%");
         comboBox.setPlaceholder("Responsavel");
         comboBox.setWidth("min-content");
+        setComboBoxData(comboBox);
+
         comboBox2.setPlaceholder("Status");
         comboBox2.setWidth("min-content");
+        setComboBoxStatusData(comboBox2);
 
         buttonTertiary.setText("Adicionar Responsavel");
         buttonTertiary.setWidth("min-content");
@@ -99,8 +105,12 @@ public class ViewView extends Composite<VerticalLayout> {
 
         comboBox3.setPlaceholder("Prioridade");
         comboBox3.setWidth("min-content");
+        setComboBoxPrioridadeData(comboBox3);
+
         comboBox4.setPlaceholder("Categoria");
         comboBox4.setWidth("min-content");
+        setComboBoxCategoriaData(comboBox4);
+
         buttonTertiary3.setText("Adicionar Prioridade");
         buttonTertiary3.setWidth("min-content");
         buttonTertiary3.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
@@ -119,6 +129,44 @@ public class ViewView extends Composite<VerticalLayout> {
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         buttonPrimary.getStyle().set("border-radius", "20px");
+
+        buttonPrimary.addClickListener(event -> {
+            ListaTarefas listaTarefas = new ListaTarefas();
+            listaTarefas.setData_tarefa(Integer.parseInt(textField.getValue()));
+            listaTarefas.setDescricao_tarefa(textArea2.getValue());
+            listaTarefas.setObservacao(textArea.getValue());
+            Prioridade prioridadeSelecionado = (Prioridade) comboBox3.getValue();
+            Responsavel responsavelSelecionado = (Responsavel) comboBox.getValue();
+            CategoriaTarefa categoriaSelecionado = (CategoriaTarefa) comboBox4.getValue();
+            Status statusSelecionado = (Status) comboBox2.getValue();
+
+            if (prioridadeSelecionado != null && responsavelSelecionado != null && categoriaSelecionado != null && statusSelecionado != null) {
+                listaTarefas.setPrioridade(prioridadeSelecionado);
+                listaTarefas.setResponsavel(responsavelSelecionado);
+                listaTarefas.setCategoriaTarefa(categoriaSelecionado);
+                listaTarefas.setStatus(statusSelecionado);
+                if (controller4.inserir(listaTarefas) == true) {
+                    Notification notification = new Notification(
+                            "Tarefa salvo com sucesso.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                } else {
+                    Notification notification = new Notification(
+                            "Erro ao salvar. Verifique se todos os dados foram preenchidos.", 3000);
+                    notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    notification.setPosition(Notification.Position.MIDDLE);
+                    notification.open();
+                }
+            } else {
+                Notification notification = new Notification(
+                        "Por favor, selecione prioridade, responsavel, status e categoria", 3000);
+                notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+                notification.setPosition(Notification.Position.MIDDLE);
+                notification.open();
+                return;
+            }
+        });
         
         getContent().add(formLayout2Col);
         formLayout2Col.add(textField);

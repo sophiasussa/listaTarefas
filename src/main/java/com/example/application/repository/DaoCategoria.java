@@ -64,6 +64,24 @@ public class DaoCategoria {
         }
     }
 
+    public CategoriaTarefa pesquisar(int id) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from categoriatarefa where id = ?";
+			CategoriaTarefa categoriaTarefa = new CategoriaTarefa();
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				categoriaTarefa.setId(resultSet.getInt("id"));
+				categoriaTarefa.setDescricao(resultSet.getString("descricao"));
+			}
+			return categoriaTarefa;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
     public List<CategoriaTarefa> pesquisarTodos() {
         try {
             Connection connection = DBConnection.getInstance().getConnection();

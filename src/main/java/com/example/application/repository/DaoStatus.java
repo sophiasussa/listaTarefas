@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.application.model.Responsavel;
 import com.example.application.model.Status;
 
 public class DaoStatus {
@@ -63,6 +64,24 @@ public class DaoStatus {
             return false;
         }
     }
+
+    public Status pesquisar(int id) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from status where id = ?";
+			Status status = new Status();
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				status.setId(resultSet.getInt("id"));
+				status.setDescricao(resultSet.getString("descricao"));
+			}
+			return status;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
     public List<Status> pesquisarTodos() {
         try {

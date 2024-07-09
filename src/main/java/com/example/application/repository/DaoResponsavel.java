@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import com.example.application.model.Responsavel;
 
 public class DaoResponsavel {
@@ -63,6 +64,24 @@ public class DaoResponsavel {
             return false;
         }
     }
+
+    public Responsavel pesquisar(int id) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from responsavel where id = ?";
+			Responsavel responsavel = new Responsavel();
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				responsavel.setId(resultSet.getInt("id"));
+				responsavel.setNome(resultSet.getString("nome"));
+			}
+			return responsavel;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
     public List<Responsavel> pesquisarTodos() {
         try {

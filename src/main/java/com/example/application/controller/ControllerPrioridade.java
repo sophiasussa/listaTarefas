@@ -21,6 +21,10 @@ public class ControllerPrioridade {
         return dao.excluir(prioridade);
     }
 
+    public Prioridade pesquisar(int id){
+        return dao.pesquisar(id);
+    }
+
     public List<Prioridade> pesquisarTodos(){
         return dao.pesquisarTodos();
     }

@@ -21,6 +21,10 @@ public class ControllerResponsavel {
         return dao.excluir(responsavel);
     }
 
+    public Responsavel pesquisar(int id){
+        return dao.pesquisar(id);
+    }
+
     public List<Responsavel> pesquisarTodos(){
         return dao.pesquisarTodos();
     }

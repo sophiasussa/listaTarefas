@@ -21,6 +21,10 @@ public class ControllerCategoria {
         return dao.excluir(categoriaTarefa);
     }
 
+    public CategoriaTarefa pesquisar(int id){
+        return dao.pesquisar(id);
+    }
+
     public List<CategoriaTarefa> pesquisarTodos(){
         return dao.pesquisarTodos();
     }

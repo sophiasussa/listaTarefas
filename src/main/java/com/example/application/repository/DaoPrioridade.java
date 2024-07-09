@@ -65,6 +65,24 @@ public class DaoPrioridade {
         }
     }
 
+    public Prioridade pesquisar(int id) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * from prioridade where id = ?";
+			Prioridade prioridade = new Prioridade();
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				prioridade.setId(resultSet.getInt("id"));
+				prioridade.setDescricao(resultSet.getString("descricao"));
+			}
+			return prioridade;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
     public List<Prioridade> pesquisarTodos() {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
