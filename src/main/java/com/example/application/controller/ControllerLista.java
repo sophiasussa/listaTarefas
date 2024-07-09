@@ -17,6 +17,10 @@ public class ControllerLista {
         return dao.alterar(listaTarefas);
     }   
 
+    public boolean excluir(ListaTarefas listaTarefas){
+        return dao.excluir(listaTarefas);
+    }   
+
     public List<ListaTarefas> pesquisarTodos(){
         return dao.pesquisarTodos();
     }

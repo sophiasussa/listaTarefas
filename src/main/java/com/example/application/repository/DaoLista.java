@@ -67,6 +67,25 @@ public class DaoLista {
 		}
 	}
 
+	public boolean excluir(ListaTarefas listaTarefas) {
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String delete = "DELETE from listatarefas where id = ?";
+			PreparedStatement preparedStatement1 = connection.prepareStatement(delete);
+			preparedStatement1.setInt(1, listaTarefas.getId());
+			int resultado = preparedStatement1.executeUpdate();
+			if (resultado > 0) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+
 	public List<ListaTarefas> pesquisarTodos() {
 		List<ListaTarefas> lista = new ArrayList<>();
 		try {

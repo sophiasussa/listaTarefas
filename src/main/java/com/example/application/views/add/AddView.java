@@ -119,14 +119,13 @@ public class AddView extends Composite<VerticalLayout> {
             SubMenu subMenu = menuItem.getSubMenu();
             subMenu.addItem("Editar", event -> abrirDialogoEdicao(listaTarefa));
             subMenu.addItem("Excluir", event -> {
-            /*  int tarefaId = listaTarefa.getId();
-                boolean sucesso = controller.excluirTarefa(tarefaId); 
+                boolean sucesso = controller4.excluir(listaTarefa); 
                 if (sucesso) {
                     Notification.show("Tarefa excluída com sucesso!");
-                    basicGrid.setItems(controller.pesquisarTodos());
+                    basicGrid.setItems(controller4.pesquisarTodos());
                 } else {
                     Notification.show("Erro ao excluir tarefa.");
-                }*/
+                }
             });
             return menuBar;
         }).setHeader("Opções");
