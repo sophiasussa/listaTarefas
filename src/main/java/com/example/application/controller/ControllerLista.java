@@ -21,8 +21,15 @@ public class ControllerLista {
         return dao.excluir(listaTarefas);
     }   
 
+    public List<ListaTarefas> pesquisarPorDataTarefa(int data_tarefa){
+        return dao.pesquisarPorDataTarefa(data_tarefa);
+    }
+/* 
+    public List<ListaTarefas> pesquisarPorResponsavel(String responsavel){
+        return dao.pesquisarPorResponsavel(responsavel);
+    }*/
+
     public List<ListaTarefas> pesquisarTodos(){
         return dao.pesquisarTodos();
     }
-
 }

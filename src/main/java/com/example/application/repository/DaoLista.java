@@ -85,6 +85,71 @@ public class DaoLista {
 		}
 	}
 
+	public List<ListaTarefas> pesquisarPorDataTarefa(int dataTarefa) {
+		List<ListaTarefas> lista = new ArrayList<>();
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * FROM listaTarefas WHERE data_tarefa = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, dataTarefa);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				ListaTarefas listaTarefa = new ListaTarefas();
+				listaTarefa.setId(resultSet.getInt("id"));
+				listaTarefa.setData_tarefa(resultSet.getInt("data_tarefa"));
+				listaTarefa.setDescricao_tarefa(resultSet.getString("descricao_tarefa"));
+				listaTarefa.setObservacao(resultSet.getString("observacao"));
+				Prioridade prioridade = new DaoPrioridade().pesquisar(resultSet.getInt("idPrioridade"));
+				CategoriaTarefa categoriaTarefa = new DaoCategoria().pesquisar(resultSet.getInt("idCategoriaTarefa"));
+				Responsavel responsavel = new DaoResponsavel().pesquisar(resultSet.getInt("idResponsavel")); 
+				Status status = new DaoStatus().pesquisar(resultSet.getInt("idStatus"));                  
+				listaTarefa.setPrioridade(prioridade);
+				listaTarefa.setCategoriaTarefa(categoriaTarefa);
+				listaTarefa.setResponsavel(responsavel);
+				listaTarefa.setStatus(status);
+				lista.add(listaTarefa);
+			}
+			
+			return lista;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<ListaTarefas> pesquisarPorResponsavel(int idResponsavel) {
+		List<ListaTarefas> lista = new ArrayList<>();
+		try {
+			Connection connection = DBConnection.getInstance().getConnection();
+			String consulta = "SELECT * FROM listaTarefas WHERE id_responsavel = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(consulta);
+			preparedStatement.setInt(1, idResponsavel);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				ListaTarefas listaTarefa = new ListaTarefas();
+				listaTarefa.setId(resultSet.getInt("id"));
+				listaTarefa.setData_tarefa(resultSet.getInt("data_tarefa"));
+				listaTarefa.setDescricao_tarefa(resultSet.getString("descricao_tarefa"));
+				listaTarefa.setObservacao(resultSet.getString("observacao"));
+				Prioridade prioridade = new DaoPrioridade().pesquisar(resultSet.getInt("idPrioridade"));
+				CategoriaTarefa categoriaTarefa = new DaoCategoria().pesquisar(resultSet.getInt("idCategoriaTarefa"));
+				Responsavel responsavel = new DaoResponsavel().pesquisar(resultSet.getInt("idResponsavel")); 
+				Status status = new DaoStatus().pesquisar(resultSet.getInt("idStatus"));                  
+				listaTarefa.setPrioridade(prioridade);
+				listaTarefa.setCategoriaTarefa(categoriaTarefa);
+				listaTarefa.setResponsavel(responsavel);
+				listaTarefa.setStatus(status);
+				lista.add(listaTarefa);
+			}
+			
+			return lista;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public List<ListaTarefas> pesquisarTodos() {
 		List<ListaTarefas> lista = new ArrayList<>();

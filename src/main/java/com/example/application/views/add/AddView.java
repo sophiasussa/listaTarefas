@@ -40,6 +40,7 @@ import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,20 @@ public class AddView extends Composite<VerticalLayout> {
         buttonPrimary.getStyle().set("cursor", "pointer");
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        buttonPrimary.addClickListener(event -> {
+            String searchTerm = textField.getValue().trim();
+            
+            if (searchTerm.isEmpty()) {
+                List<ListaTarefas> todosClientes = controller4.pesquisarTodos();
+                basicGrid.setItems(todosClientes);
+            } else if (searchTerm.matches("\\d+")) {
+                int dataTarefa = Integer.parseInt(searchTerm);
+                List<ListaTarefas> resultado = controller4.pesquisarPorDataTarefa(dataTarefa);
+                basicGrid.setItems(resultado != null ? resultado : Collections.emptyList());
+            }
+        });
+
         basicGrid.setWidth("100%");
         basicGrid.getStyle().set("flex-grow", "0");
         basicGrid.getElement().getStyle().set("box-shadow", "0 0 6px rgba(0, 0, 0, 0.1)");
